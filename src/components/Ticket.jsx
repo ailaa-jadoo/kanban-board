@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { BsCircleFill, BsFillExclamationSquareFill } from 'react-icons/bs';
 import { FaUserAlt, FaUserAltSlash, FaCheckCircle } from 'react-icons/fa';
+import { useLocalStorage } from 'react-use'; // Import useLocalStorage
 
 function Ticket({ ticket, users }) {
   const { title, status, priority, id, tag, userId } = ticket;
   const user = users.find((u) => u.id === userId);
-  const [isSelected, setIsSelected] = useState(false);
+
+  // Initialize the isSelected state with a default value, or retrieve the saved state from local storage.
+  const [localStorageSelected, setLocalStorageSelected] = useLocalStorage(`ticket-selected-${id}`, false);
+  const [isSelected, setIsSelected] = useState(localStorageSelected);
 
   const userIcon = user && user.available ? <FaUserAlt className="user-icon" /> : <FaUserAltSlash className="user-icon red" />;
   const selectionIcon = !isSelected ? null : <FaCheckCircle className="ticket-selected" />;
 
   const handleTicketClick = () => {
     setIsSelected(!isSelected);
+    setLocalStorageSelected(!isSelected); // Save the selection state to local storage
   };
 
   return (

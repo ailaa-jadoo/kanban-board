@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Kanbanboard from './components/kanboard';
 import Options from './components/Options';
+import { useLocalStorage } from 'react-use';
 
 const API_URL = 'https://api.quicksell.co/v1/internal/frontend-assignment';
 
 function App() {
+  // Initialize the groupBy state with a default value, or retrieve the saved state from local storage.
+  const [localStorageGroupBy, setLocalStorageGroupBy] = useLocalStorage('groupBy', 'status');
   const [tickets, setTickets] = useState([]);
   const [users, setUsers] = useState([]);
-  const [groupBy, setGroupBy] = useState('status'); // Default grouping option
+  const [groupBy, setGroupBy] = useState(localStorageGroupBy);
 
   useEffect(() => {
     // Fetch data from the API
@@ -30,4 +33,3 @@ function App() {
 }
 
 export default App;
-

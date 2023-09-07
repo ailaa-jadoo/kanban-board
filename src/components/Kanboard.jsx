@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Ticket from './ticket';
 import { BsPlusLg } from 'react-icons/bs';
-import { FaThumbsUp, FaExclamationTriangle, FaBell, FaRegClock, FaMinusCircle } from 'react-icons/fa'; // Import priority icons
+import { FaThumbsUp, FaExclamationTriangle, FaBell, FaRegClock, FaMinusCircle } from 'react-icons/fa';
 import { SiTodoist } from 'react-icons/si';
 import { TbProgress } from 'react-icons/tb';
 import { RxCrossCircled } from 'react-icons/rx';
-
+import { useLocalStorage } from 'react-use'; // Import useLocalStorage
 
 function Kanbanboard({ tickets, users, groupBy }) {
+  // Initialize the groupBy state with a default value, or retrieve the saved state from local storage.
+  const [localStorageGroupBy, setLocalStorageGroupBy] = useLocalStorage('groupBy', 'status');
+
   // Function to group tickets based on the selected option
   const groupTickets = () => {
-    switch (groupBy) {
+    switch (localStorageGroupBy || groupBy) { // Use localStorage value if available, otherwise, use the prop.
       case 'status':
         return groupByStatus(tickets);
       case 'user':
@@ -23,6 +26,7 @@ function Kanbanboard({ tickets, users, groupBy }) {
         return {};
     }
   };
+
 
   // Function to sort tickets based on priority
   const sortTicketsByPriority = (groupedTickets) => {

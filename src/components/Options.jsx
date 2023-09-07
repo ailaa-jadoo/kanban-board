@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
+import { useLocalStorage } from 'react-use';
 
 function Options({ groupBy, setGroupBy }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [localStorageGroupBy, setLocalStorageGroupBy] = useLocalStorage('groupBy', 'status');
 
   const handleOptionClick = (value) => {
     setGroupBy(value);
-    setIsOpen(false);
+    setLocalStorageGroupBy(value);
+    
+    // Refresh the page when a new grouping option is selected
+    window.location.reload();
   };
 
-  // Define an object to map groupBy values to their corresponding display text
   const groupByOptions = {
     'status': 'Status',
     'user': 'User',
@@ -22,7 +26,7 @@ function Options({ groupBy, setGroupBy }) {
         onClick={() => setIsOpen(!isOpen)}
         className="dropdown-toggle"
       >
-        Group By: {groupByOptions[groupBy]}
+        Group By: {groupByOptions[localStorageGroupBy || groupBy]}
       </button>
       {isOpen && (
         <div className="dropdown-menu">
